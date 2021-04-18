@@ -221,12 +221,15 @@ string des::bitset_to_string(const bitset<64>& bs)
 {
     string s;
 
-    char c;
+    char c(0);
     for (unsigned i = 0; i < 64; i++)
     {
         c += (bs[i] << (i % 8));
         if ((i % 8) == 7)
+        {
             s.push_back(c);
+            c = 0;
+        }
     }
 
     return s;
@@ -350,7 +353,7 @@ string des::decrypt_ECB(const std::string& crp)
     auto blocks = split_string_for64(crp);
     string msg;
     for (auto& block : blocks)
-        msg += bitset_to_string(encrypt_block(block));
+        msg += bitset_to_string(decrypt_block(block));
 
     return msg;
 }
@@ -358,20 +361,22 @@ string des::decrypt_ECB(const std::string& crp)
 list<bitset<64> > des::split_string_for64(const string &str)
 {
     list<bitset<64> > blocks;
-    char cstr[8];
+    char cstr[8] = "\0\0\0\0\0\0\0";
     unsigned i = 0;
     for (const auto& c : str)
     {
         cstr[i % 8] = c;
-        if (i % 8 == 7)
+        if ((i % 8) == 7)
+        {
             blocks.push_back(char_to_bitset(cstr));
+            cstr[0] = '\0'; cstr[1] = '\0'; cstr[2] = '\0'; cstr[3] = '\0';
+            cstr[4] = '\0'; cstr[5] = '\0'; cstr[6] = '\0'; cstr[7] = '\0';
+        }
         i++;
     }
-//    if (i %)
 
     if ((i % 8) != 0)
     {
-        cstr[i % 8] = '\0';
         blocks.push_back(char_to_bitset(cstr));
     }
 

@@ -26,13 +26,14 @@ private:
     // Generate 16 48-bit subkeys
     void generate_keys();
 
-    // Tool function: Convert char character array to binary
-    std::bitset<64> char_to_bitset(const char s[8]);
-    std::string     bitset_to_string(const std::bitset<64>& bs);
-
     std::string encrypt_ECB(const std::string& mes);
     std::string decrypt_ECB(const std::string& crp);
-    std::list<std::bitset<64> > split_string_for64(const std::string &str);
+
+public:
+    // Tool functions:
+    static std::bitset<64> char_to_bitset(const char s[8]);
+    static std::string     bitset_to_string(const std::bitset<64>& bs);
+    static std::list<std::bitset<64> > split_string_for64(const std::string &str);
 
 protected:
     // DES encryption
