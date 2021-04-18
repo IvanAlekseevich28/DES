@@ -1,27 +1,47 @@
 #pragma once
-#include <memory.h>
-#include <string.h>
-
+#include <bitset>
+#include <string>
+#include <list>
 
 class des
 {
 public:
-    enum
+    enum : int
     {
-        ENCRYPT,
-        DECRYPT
+        ECB
     };
-    des();
-//    void DES(char Out[8], char In[8], const PSubKey pSubKey, bool Type);//Standard DES encryption/decryption
+    des(const std::string& key);
+    void set_key(const std::string& key);
+
+    std::string encrypt(const std::string& mes, int mode = ECB);
+    std::string decrypt(const std::string& crp, int mode = ECB);
+
 private:
-    void DES(char Out[8], char In[8], const PSubKey pSubKey, bool Type);//Standard DES encryption/decryption
-    void SetKey(const char* Key, int len);// Set the key
-    void SetSubKey(PSubKey pSubKey, const char Key[8]);// Set the subkey
-    void F_func(bool In[32], const bool Ki[48]);// f function
-    void S_func(bool Out[32], const bool In[48]);// S box instead
-    void Transform(bool *Out, bool *In, const char *Table, int len);// Transform
-    void Xor(bool *InA, const bool *InB, int len);// Xor
-    void RotateL(bool *In, int len, int loop);// rotate left
-    void ByteToBit(bool *Out, const char *In, int bits);// Byte group is converted to bit group
-    void BitToByte(char *Out, const bool *In, int bits);// Bit group is converted to byte group
+    // Cryptographic function f, receives 32-bit data and 48-bit subkey, and produces a 32-bit output
+    std::bitset<32> f(std::bitset<32> R, std::bitset<48> k);
+
+    // Shift left and right of 56-bit key
+    std::bitset<28> left_shift(std::bitset<28> k, int shift);
+
+    // Generate 16 48-bit subkeys
+    void generate_keys();
+
+    // Tool function: Convert char character array to binary
+    std::bitset<64> char_to_bitset(const char s[8]);
+    std::string     bitset_to_string(const std::bitset<64>& bs);
+
+    std::string encrypt_ECB(const std::string& mes);
+    std::string decrypt_ECB(const std::string& crp);
+    std::list<std::bitset<64> > split_string_for64(const std::string &str);
+
+protected:
+    // DES encryption
+    std::bitset<64> encrypt_block(std::bitset<64>& plain);
+
+    // DES decryption
+    std::bitset<64> decrypt_block(std::bitset<64>& cipher);
+
+private:
+    std::bitset<64> key; // 64-bit key
+    std::bitset<48> sub_key[16]; // Store the 16-wheel key
 };
