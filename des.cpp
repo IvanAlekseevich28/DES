@@ -124,6 +124,16 @@ void des::set_key(const std::string& key)
     generate_keys();
 }
 
+bool des::set_init_vector(const std::string &init_str)
+{
+    if (init_str.size() != 8)
+        return false;
+
+    init_vec = char_to_bitset(init_str.c_str());
+
+    return true;
+}
+
 bitset<32> des::f(bitset<32> R, bitset<48> k)
 {
     bitset<48> expandR;
@@ -320,6 +330,10 @@ string des::encrypt(const string& mes, int mode)
     {
         return encrypt_ECB(mes);
     }
+    case des::CFB:
+    {
+        return encrypt_CFB(mes);
+    }
     default:
         return "";
     }
@@ -332,6 +346,10 @@ string des::decrypt(const string& crp, int mode)
     case des::ECB:
     {
         return decrypt_ECB(crp);
+    }
+    case des::CFB:
+    {
+        return decrypt_CFB(crp);
     }
     default:
         return "";

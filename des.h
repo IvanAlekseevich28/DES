@@ -2,16 +2,19 @@
 #include <bitset>
 #include <string>
 #include <list>
+#include <optional>
 
 class des
 {
 public:
     enum : int
     {
-        ECB
+        ECB,    // Electro Code Book
+        CFB     // Cipher Feed Back
     };
     des(const std::string& key);
     void set_key(const std::string& key);
+    bool set_init_vector(const std::string& init_str);
 
     std::string encrypt(const std::string& mes, int mode = ECB);
     std::string decrypt(const std::string& crp, int mode = ECB);
@@ -29,6 +32,9 @@ private:
     std::string encrypt_ECB(const std::string& mes);
     std::string decrypt_ECB(const std::string& crp);
 
+    std::string encrypt_CFB(const std::string& mes);
+    std::string decrypt_CFB(const std::string& crp);
+
 public:
     // Tool functions:
     static std::bitset<64> char_to_bitset(const char s[8]);
@@ -45,4 +51,6 @@ protected:
 private:
     std::bitset<64> key; // 64-bit key
     std::bitset<48> sub_key[16]; // Store the 16-wheel key
+
+    std::optional<std::bitset<64> > init_vec; // store init vector for CFB mode
 };
