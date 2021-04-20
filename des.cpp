@@ -403,10 +403,28 @@ list<bitset<64> > des::split_string_for64(const string &str)
 
 std::string des::encrypt_CFB(const std::string& mes)
 {
+    auto blocks = split_string_for64(mes);
+    string crp;
+    auto C = init_vec.value();
+    for (const auto& block : blocks)
+    {
+        C = encrypt_block(C) ^ block;
+        crp += bitset_to_string(C);
+    }
 
+    return crp;
 }
 
 std::string des::decrypt_CFB(const std::string& crp)
 {
+    auto blocks = split_string_for64(crp);
+    string mes;
+    auto C = init_vec.value();
+    for (const auto& block : blocks)
+    {
+        C = decrypt_block(C) ^ block;
+        mes += bitset_to_string(C);
+    }
 
+    return crp;
 }
