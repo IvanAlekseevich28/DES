@@ -400,3 +400,13 @@ list<bitset<64> > des::split_string_for64(const string &str)
 
     return blocks;
 }
+
+std::string des::encrypt_CFB(const std::string& mes)
+{
+
+}
+
+std::string des::decrypt_CFB(const std::string& crp)
+{
+
+}
