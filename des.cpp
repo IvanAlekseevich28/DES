@@ -124,6 +124,12 @@ void des::set_key(const std::string& key)
     generate_keys();
 }
 
+void des::set_init_vector(const std::string &init)
+{
+    auto vec = char_to_bitset(init.c_str());
+    init_vec.emplace(vec);
+}
+
 bitset<32> des::f(bitset<32> R, bitset<48> k)
 {
     bitset<48> expandR;
