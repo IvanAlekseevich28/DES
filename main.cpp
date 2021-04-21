@@ -78,6 +78,11 @@ int main(int argc, char* argv[])
     }
 
     des d(key);
+
+    if (init_vec.size())
+    {
+        d.set_init_vector(init_vec);
+    }
     auto crp = d.encrypt(str, mode);
     auto mes = d.decrypt(crp, mode);
 

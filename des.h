@@ -21,7 +21,7 @@ public:
 
 private:
     // Cryptographic function f, receives 32-bit data and 48-bit subkey, and produces a 32-bit output
-    std::bitset<32> f(std::bitset<32> R, std::bitset<48> k);
+    std::bitset<32> f(std::bitset<32> R, std::bitset<48> k) const;
 
     // Shift left and right of 56-bit key
     std::bitset<28> left_shift(std::bitset<28> k, int shift);

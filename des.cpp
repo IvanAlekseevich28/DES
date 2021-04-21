@@ -134,7 +134,7 @@ bool des::set_init_vector(const std::string &init_str)
     return true;
 }
 
-bitset<32> des::f(bitset<32> R, bitset<48> k)
+bitset<32> des::f(bitset<32> R, bitset<48> k)const
 {
     bitset<48> expandR;
     // The first step: extended replacement, 32 -> 48
@@ -247,7 +247,7 @@ string des::bitset_to_string(const bitset<64>& bs)
 /**
 * DES encryption
 */
-bitset<64> des::encrypt_block(bitset<64>& plain)
+bitset<64> des::encrypt_block(bitset<64>& plain) const
 {
     bitset<64> cipher;
     bitset<64> current_bits;
@@ -285,7 +285,7 @@ bitset<64> des::encrypt_block(bitset<64>& plain)
 /**
 * DES decryption
 */
-bitset<64> des::decrypt_block(bitset<64>& cipher)
+bitset<64> des::decrypt_block(bitset<64>& cipher) const
 {
     bitset<64> plain;
     bitset<64> current_bits;
@@ -426,5 +426,5 @@ std::string des::decrypt_CFB(const std::string& crp)
         mes += bitset_to_string(C);
     }
 
-    return crp;
+    return mes;
 }
