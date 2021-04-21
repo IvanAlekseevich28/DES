@@ -43,10 +43,10 @@ public:
 
 protected:
     // DES encryption
-    std::bitset<64> encrypt_block(std::bitset<64>& plain);
+    std::bitset<64> encrypt_block(const std::bitset<64>& plain) const;
 
     // DES decryption
-    std::bitset<64> decrypt_block(std::bitset<64>& cipher);
+    std::bitset<64> decrypt_block(const std::bitset<64>& cipher) const;
 
 private:
     std::bitset<64> key; // 64-bit key

@@ -247,7 +247,7 @@ string des::bitset_to_string(const bitset<64>& bs)
 /**
 * DES encryption
 */
-bitset<64> des::encrypt_block(bitset<64>& plain) const
+bitset<64> des::encrypt_block(const bitset<64>& plain) const
 {
     bitset<64> cipher;
     bitset<64> current_bits;
@@ -285,7 +285,7 @@ bitset<64> des::encrypt_block(bitset<64>& plain) const
 /**
 * DES decryption
 */
-bitset<64> des::decrypt_block(bitset<64>& cipher) const
+bitset<64> des::decrypt_block(const bitset<64>& cipher) const
 {
     bitset<64> plain;
     bitset<64> current_bits;
@@ -422,8 +422,10 @@ std::string des::decrypt_CFB(const std::string& crp)
     auto C = init_vec.value();
     for (const auto& block : blocks)
     {
-        C = decrypt_block(C) ^ block;
+        auto old_C = C;
+        C = encrypt_block(old_C) ^ block;
         mes += bitset_to_string(C);
+        C = encrypt_block(old_C) ^ C;
     }
 
     return mes;
